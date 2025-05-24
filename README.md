@@ -61,7 +61,7 @@ Ensure the following are installed on your machine:
 #### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/Alumasa45/restaurant-booking-backend.git
+git clone <repository-url>
 ```
 
 ---
