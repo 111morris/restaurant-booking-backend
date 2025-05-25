@@ -5,10 +5,22 @@ const cors = require("cors"); // ✅ Import CORS
 const listEndpoints = require("express-list-endpoints");
 const { authenticateToken } = require("./middleware/authMiddleware");
 const db = require("./config/db"); // Ensure DB connection is established
-const aiRoutes = require("./routes/aiRoutes");
 
 // Initialize Express app
 const app = express();
+
+//the previous implementation was importing the AI routes unconditionally even if openai api key is not set 
+
+const apikey = process.env.OPENAI_API_KEY;
+
+if (apikey && apikey !== "not_set") {
+  console.log("AI routes enabled - key provided");
+  const aiRoutes = require("./routes/aiRoutes");
+  app.use("/api/ai", aiRoutes);
+} else {
+  console.log("AI routes disabled - OPENAI_API_KEY is missing or set to 'not_set'");
+}
+
 
 // Initialize HTTP server
 const http = require("http");
@@ -70,12 +82,21 @@ app.use("/api/tables", tableRoutes);
 app.use("/api/chatbot", chatbotRoutes);
 app.use("/api/notifications", notificationRoutes);
 app.use("/api/payments", paymentRoutes);
-app.use("/api/ai", aiRoutes);
+
+// this will register AI routes conditionally 
+if (apikey && apikey !== "not_set") {
+  console.log("AI routes enabled - key provided");
+  const aiRoutes = require("./routes/aiRoutes");
+  app.use("/api/ai", aiRoutes);
+} else {
+  console.log("AI routes disabled - OPENAI_API_KEY is missing or set to 'not_set'");
+}
 
 // Protected Route Example
 app.get("/api/protected", authenticateToken, (req, res) => {
   res.json({ message: "You have access to this protected route" });
 });
+
 
 // Handle socket connections
 io.on("connection", (socket) => {
