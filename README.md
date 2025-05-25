@@ -258,3 +258,9 @@ Thanks to the developers and tools that made this project possible:
 * [Socket.IO](https://socket.io/)
 * [Firebase](https://firebase.google.com/)
 * [OpenAI](https://platform.openai.com/)
+
+- Improve AI service handling and app stability
+- Updated aiService.js to gracefully handle missing or invalid OpenAI API key
+- Modified app.js to conditionally load AI routes based on config
+- Reviewed db.js for secure env handling and cleaned up fallback logic
+- Enhanced aiRouters.js to return clear errors when AI is disabled
