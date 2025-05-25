@@ -2,3 +2,4 @@
 src/config/firebaseServiceAccount.json
 node_modules
 .env 
+goal.txt
