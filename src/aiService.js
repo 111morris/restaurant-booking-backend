@@ -2,15 +2,14 @@ const { OpenAI } = require("openai");
 
 require("dotenv").config();
 
+const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+
 let openai = null;
-const apiKey = process.env.OPENAI_API_KEY;
 
 // Initialize OpenAI API if the api is set
-if (apikey && apikey !== 'not_set') {
-  openai = new OpenAI({ apiKey });
-} else {
-  console.warn("OPENAI_API_KEY is not set. AI features are disabled.");
-}
+if (OPENAI_API_KEY && OPENAI_API_KEY !== 'not_set') {
+  openai = new OpenAI({ apiKey: OPENAI_API_KEY });
+} 
 
 // Function to send a message to ChatGPT
 const askChatGPT = async (message) => {
@@ -25,10 +24,12 @@ const askChatGPT = async (message) => {
       messages: [{ role: "user", content: message }],
     });
 
-    return completion.choices[0].message.content;
+    return {
+      response: completion.choices[0].message.content,
+    }
   } catch (error) {
     console.error("OpenAI API Error:", error.response ? error.response.data : error.message);
-    return `Error: ${error.message}`;
+    return { error: `OpenAI API Error: ${error.message}` }
   }
 };
 
